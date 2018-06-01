@@ -2,18 +2,41 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Everytime Bible</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    
+    <h1>Bible verse</h1>
+    <ul>dddd</ul>
 
     <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
+
+    
+      const electron = require('electron');
+      const {ipcRenderer} = electron;
+      const ul = document.querySelector('ul');
+
+        ipcRenderer.on('mode', function (e, mode) {
+          const li = document.createElement('li');
+          const modeText = document.createTextNode(mode);
+          li.appendChild(modeText);
+          ul.appendChild(li);
+        });
+
+        ipcRenderer.on('interval', function (e, interval) {
+          const li = document.createElement('li');
+          const intervalText = document.createTextNode(interval);
+          li.appendChild(intervalText);
+          ul.appendChild(li);
+        });
+
+        ipcRenderer.on('duration', function (e, duration) {
+          const li = document.createElement('li');
+          const durationText = document.createTextNode(duration);
+          li.appendChild(durationText);
+          ul.appendChild(li);
+        });
+ 
     </script>
   </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Preferences</title>
+  </head>
+  <body>
+
+    <form>
+        <div>
+            <label>Meditation Mode</label>
+            <select id ="mode">
+            <option value="basic">Basic</option>
+            <option value="write">Write</option>
+            <option value="memorize">Memorize</option>
+            <option value="readaloud">Read Aloud</option>
+            </select>
+    </div>
+
+    <div>
+            <label>Interval Time</label>
+            <select id ="interval">
+            <option value="one">1 hour</option>
+            <option value="two">2 hour</option>
+            <option value="three">3 hour</option>
+            <option value="four">4 hour</option>
+            </select>
+    </div>
+
+    <div>
+            <label>Duration Time</label>
+            <select id ="duration">
+            <option value="one">1 minute</option>
+            <option value="two">2 minute</option>
+            <option value="three">3 minute</option>
+            <option value="four">4 minute</option>
+            </select>
+    </div>
+
+    <button type="submit">save</button>
+    </form>
+
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', submitForm);
+
+        function submitForm(e){
+            e.preventDefault();
+            const mode = document.querySelector('#mode').value;
+            const interval = document.querySelector('#interval').value;
+            const duration = document.querySelector('#duration').value;
+
+            ipcRenderer.send('setting', [mode,interval,duration]);
+            //console.log(123);
+        }
+    </script>
+  </body>
+</html>

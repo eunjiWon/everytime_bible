@@ -18,5 +18,9 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "electron-json-storage": "^4.1.0",
+    "mysql": "^2.15.0"
   }
 }
