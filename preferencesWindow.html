@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <title>Preferences</title>
-    <link rel="stylesheet" type="text/css" href="./scss/buttons.scss">
   </head>
   <body>
 
@@ -21,20 +20,10 @@
     <div>
             <label>Interval Time</label>
             <select id ="interval">
-            <option value="one">1 hour</option>
-            <option value="two">2 hour</option>
-            <option value="three">3 hour</option>
-            <option value="four">4 hour</option>
-            </select>
-    </div>
-
-    <div>
-            <label>Duration Time</label>
-            <select id ="duration">
-            <option value="one">1 minute</option>
-            <option value="two">2 minute</option>
-            <option value="three">3 minute</option>
-            <option value="four">4 minute</option>
+            <option value="one">1 분</option>
+            <option value="two">2 분</option>
+            <option value="three">3 분</option>
+            <option value="four">4 분</option>
             </select>
     </div>
 
@@ -52,9 +41,9 @@
             e.preventDefault();
             const mode = document.querySelector('#mode').value;
             const interval = document.querySelector('#interval').value;
-            const duration = document.querySelector('#duration').value;
+            //const duration = document.querySelector('#duration').value;
 
-            ipcRenderer.send('setting', [mode,interval,duration]);
+            ipcRenderer.send('setting', [mode,interval]);
             //console.log(123);
         }
     </script>
