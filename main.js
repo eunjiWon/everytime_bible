@@ -3,13 +3,14 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const storage = require('electron-json-storage');
-const os = require('os');
+const notify = require('electron-main-notification');
+const Notification = require('electron-native-notification');
 
-const {app, BrowserWindow,Menu, ipcMain, Notification, window} = electron;
+const dialog = require('electron').dialog;
+
+const {app, BrowserWindow, Menu, ipcMain } = electron;
  
-let mainWindow;
 let preferencesWindow;
-let myNotification;
 
 app.on('ready',  createPreferencesWindow);
 
@@ -21,80 +22,34 @@ app.on('window-all-closed', function () {
 
 app.on('activate', function () {
 
-  //timer가 시간재서
-  //push notification해주는거
+  //get_bible();
+  //set_interval();
+
 });
-
-// function createWindow () {
- 
-//   mainWindow = new BrowserWindow({});
-
-//   mainWindow.loadFile('index.html')
-
-//   // Open the DevTools.
-//   // mainWindow.webContents.openDevTools()
-//   mainWindow.on('closed', function () {
-//     mainWindow = null;
-//     app.quit();
-//   })
-//   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-//   Menu.setApplicationMenu(mainMenu);
-
-//   // myNotification.show();
-//   //여기에 duration시간은 어떻게 줄것인지
-//   //interval은 ??
-//   // 어떻게 사용자가 끄지 못하도록 할 것인지
-  
-//   get_bible();
-//   push_bible(selected_verse);//왜 바디가 안나오지??
-//   //set_interval();
-// };
-
-  function push_bible(selected_verse) {
-
-    var notification = new Notification('bible', {
-      title: "dddd",
-      body: selected_verse,
-    });
-
-    notification.show();
-    console.log("selected"+selected_verse);
-
-    //이걸로는 한 5초?? 이상 안 머문다. 그 이상이 안됨
-    setTimeout(notification.close.bind(notification), 600000); 
-  }
-
-  //시간간격설정하는거 하고싶은데,
-  // 아직 잘 안댐~~
-  // function set_interval(){
-
-  //   var i = 0;
-  //   // Using an interval cause some browsers (including Firefox) are blocking notifications if there are too much in a certain time.
-  //   var interval = window.setInterval(function () {
-  //     // Thanks to the tag, we should only see the "Hi! 9" notification 
-  //     var n = new Notification("Hi! " + i, {tag: 'soManyNotification'});
-  //     if (i++ == 9) {
-  //       window.clearInterval(interval);
-  //     }
-  //   }, 200);
-
-  // }
 
   function get_bible(){
 
-    //var verse = {};
-    var verse1;
-    storage.setDataPath("/Users/gb/new_electron/electron-quick-start");
+   storage.setDataPath("/Users/gb/new_electron/electron-quick-start");
     
     const dataPath = storage.getDataPath();
-    console.log(dataPath);
+    console.log(new Date());
   
     storage.get('bible_verses',function(error, data) {
       if (error) throw error;
-       verse1 = data.verse1;
-    });
 
-    return verse1;
+      var random = Math.floor(Math.random()*3) + 1; // 1~4까지 난수
+      random_string = random.toString();
+    
+      // notify(data[random_string].name, { body: data[random_string].body }, () => {
+      // })
+
+      var buttons = ['OK', 'Cancel'];
+      dialog.showMessageBox({ type: 'info', buttons: buttons, message: data[random_string].body }, function (buttonIndex) {
+        console.log(buttonIndex);
+        //updateFooter("Exit: " + buttons[buttonIndex]);
+      });
+      
+    });
   }
 
 
@@ -116,33 +71,36 @@ function createPreferencesWindow(){
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
 
-  //selected_verse = get_bible();
-  //push_bible(selected_verse);//왜 바디가 안나오지??
-
-  push_bible(get_bible());
-
-  var cbExample = function(number, cb) {
-    setTimeout(function() {
-      var sum = 0;
-      for (var i = number; i > 0; i--) {
-        sum += i;
-      }
-      cb(sum);
-    }, 0);
-  };
-  push_bible(10, function(result) {
-    console.log(result);
-  }); // 55
-  console.log('first');
-
+  //setInterval(()=>get_bible(), 10000);
 
 }
 
-
   ipcMain.on('setting', function(e, data){
-    //mainWindow.webContents.send('duration', duration);
-    console.log(data);
+    preferencesWindow.webContents.send('setting', data[1]);
+    //data[1] : interval 
+    //data[2] : duration
+    console.log(data[1]);
     preferencesWindow.close();
+
+    if(data[1] == 'one'){
+      console.log('1시간간격실행');
+      setInterval(()=>get_bible(), 600000);
+    }
+      
+    else if(data[1] == 'two'){
+      console.log('2시간간격실행');
+      setInterval(()=>get_bible(), 8000);
+
+    }
+    else if(data[1] == 'three'){
+      console.log('3시간간격실행');
+      setInterval(()=>get_bible(), 10000);
+    }
+    else if(data[1] == 'four'){
+      console.log('4시간간격실행');
+      setInterval(()=>get_bible(), 12000);
+    }
+      
   });
 
 
@@ -168,12 +126,10 @@ const mainMenuTemplate =[
   }
 ];
 
-//if mac, add empty object to munu
 if(process.platform == 'darwin'){
   mainMenuTemplate.unshift({});
 }
 
-//Add developer tools item if not in prod
 if(process.env.NODE_ENV !== 'production'){
   mainMenuTemplate.push({
     label:'Developer Tools',

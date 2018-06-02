@@ -20,7 +20,10 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
+    "dialogs": "^1.1.20",
     "electron-json-storage": "^4.1.0",
+    "electron-main-notification": "^1.0.1",
+    "electron-native-notification": "^1.2.1",
     "mysql": "^2.15.0"
   }
 }
