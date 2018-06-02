@@ -8,7 +8,7 @@ const Notification = require('electron-native-notification');
 
 const dialog = require('electron').dialog;
 
-const {app, BrowserWindow, Menu, ipcMain } = electron;
+const {app, BrowserWindow, Menu, ipcMain} = electron;
  
 let preferencesWindow;
 
@@ -27,12 +27,13 @@ app.on('activate', function () {
 
 });
 
-  function get_bible(){
+  function get_bible( interval ){
 
    storage.setDataPath("/Users/gb/new_electron/electron-quick-start");
     
     const dataPath = storage.getDataPath();
     console.log(new Date());
+    console.log('interval' + interval);
   
     storage.get('bible_verses',function(error, data) {
       if (error) throw error;
@@ -40,18 +41,33 @@ app.on('activate', function () {
       var random = Math.floor(Math.random()*3) + 1; // 1~4까지 난수
       random_string = random.toString();
     
-      // notify(data[random_string].name, { body: data[random_string].body }, () => {
-      // })
+      //notify(data[random_string].name, { body: data[random_string].body }, () => {});
+      var time_sum = 4000;
+      while(1){
 
-      var buttons = ['OK', 'Cancel'];
-      dialog.showMessageBox({ type: 'info', buttons: buttons, message: data[random_string].body }, function (buttonIndex) {
-        console.log(buttonIndex);
-        //updateFooter("Exit: " + buttons[buttonIndex]);
-      });
+        show_notification(data,()=>{
+          time_sum +=4000;
+          console.log("dd");
+        });
+        
+        
+
+        if(time_sum > interval) break;
+
+      }
+      // var buttons = ['OK', 'Cancel'];
+      // dialog.showMessageBox({ type: 'info', buttons: buttons, message: data[random_string].body }, function (buttonIndex) {
+      //   console.log(buttonIndex);
+      //   //updateFooter("Exit: " + buttons[buttonIndex]);
+      // });
       
     });
-  }
 
+  }
+function show_notification(data){
+  var notification = new Notification(data[random_string].name, { body: data[random_string].body});
+  setTimeout(notification.close.bind(notification), 4000);
+}
 
 
 function createPreferencesWindow(){
@@ -89,8 +105,7 @@ function createPreferencesWindow(){
       
     else if(data[1] == 'two'){
       console.log('2시간간격실행');
-      setInterval(()=>get_bible(), 8000);
-
+      setInterval(()=>get_bible(20000), 20000);
     }
     else if(data[1] == 'three'){
       console.log('3시간간격실행');
