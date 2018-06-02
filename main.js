@@ -3,10 +3,9 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const storage = require('electron-json-storage');
-const notify = require('electron-main-notification');
-const Notification = require('electron-native-notification');
-
-const dialog = require('electron').dialog;
+// const notify = require('electron-main-notification');
+// const Notification = require('electron-native-notification');
+// const dialog = require('electron').dialog;
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;
  
