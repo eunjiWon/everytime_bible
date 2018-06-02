@@ -25,7 +25,7 @@ app.on('activate', function () {
 });
 
 function get_bible(){ 
-  storage.setDataPath("/Users/eunjiwon/Desktop/electron_dev");
+  storage.setDataPath("/Users/eunjiwon/Desktop/everytime_bible");
   const dataPath = storage.getDataPath();
  
   storage.get('bible_verses',function(error, data) {
@@ -39,7 +39,7 @@ function get_bible(){
     })  
   });
 }
-
+//
 function createPreferencesWindow(){
 
   preferencesWindow = new BrowserWindow({
